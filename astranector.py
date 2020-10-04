@@ -1,6 +1,7 @@
 from requests import post
 from json import dumps as to_json
 import secret_file
+from columnmaker import fill_data
 
 
 class Astranector:
@@ -40,7 +41,6 @@ class Astranector:
         :param column_to_add: what data do you want to add ? Please watch conventions as in
         https://docs.astra.datastax.com/reference?utm_campaign=Onboarding&utm_content=3.+Connect+to+Your+Database&utm_medium=email_action&utm_source=customer.io#addrow-1
         mentioned
-        TODO add method do generate payload
         """
 
         url = self.url + "/keyspaces/{keyspaceName}/tables/{tableName}/rows".format(keyspaceName=self.keyspace,
@@ -68,4 +68,12 @@ if __name__ == "__main__":
                         password=secret_file.database_password,
                         keyspace="python")
 
-    astra.insert(tablename="tryitout", column_to_add=secret_file.testdata1)
+    astra.insert(tablename="tryitout",
+                 column_to_add=fill_data(
+                     data=[
+                            ["partition", "2"],
+                            ["whenupdated", "af57dbac-063c-11eb-adc1-0242ac120002"],
+                            ["column", "test"]
+                        ]
+                                        )
+                 )
